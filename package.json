@@ -1,17 +1,3 @@
-# Step 1: Update package.json
-# Replace your current package.json build scripts and dependencies
-
-# BEFORE (Vite):
-# "scripts": {
-#   "build": "vite build",
-#   "dev": "vite dev"
-# }
-# "devDependencies": {
-#   "vite": "^5.4.19"
-# }
-
-# AFTER (Next.js):
-cat > package.json << 'EOF'
 {
   "name": "facility-management-dashboard",
   "version": "0.1.0",
