@@ -43,7 +43,8 @@ interface Alert {
   id: string;
   title: string;
   message: string;
-  severity: 'info' | 'warning' | 'error';
+  type: 'critical' | 'warning' | 'success' | 'info';  // Changed from 'severity'
+  timestamp: string;
   equipment?: string;
 }
 
@@ -113,12 +114,13 @@ function transformEnergyDataToDashboard(analysisData: EnergyAnalysis): Dashboard
     ...analysisData.hvac_inefficiencies.map((issue, index) => ({
       id: `alert-${index}`,
       title: `HVAC Issue Detected`,
-      message: issue.issue,
-      severity: issue.severity === 'high' ? 'error' : 'warning',
+      message: `${issue.equipment}: ${issue.issue}`,
+      type: (issue.severity === 'high' ? 'critical' : 
+            issue.severity === 'medium' ? 'warning' : 'info') as 'critical' | 'warning' | 'info',
+      timestamp: new Date().toISOString(),
       equipment: issue.equipment
-    }))
+    })),
   ];
-
   const widgets: Widget[] = [
     {
       id: 'priority-distribution',

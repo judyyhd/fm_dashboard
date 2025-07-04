@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "next": "^14.0.0",
-    "recharts": "^2.8.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.8.0",
     "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.30.1",
+    "eslint-config-next": "^15.3.5"
   }
 }
