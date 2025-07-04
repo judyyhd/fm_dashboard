@@ -1,35 +1,35 @@
+# Step 1: Update package.json
+# Replace your current package.json build scripts and dependencies
+
+# BEFORE (Vite):
+# "scripts": {
+#   "build": "vite build",
+#   "dev": "vite dev"
+# }
+# "devDependencies": {
+#   "vite": "^5.4.19"
+# }
+
+# AFTER (Next.js):
+cat > package.json << 'EOF'
 {
-  "name": "magic-patterns-vite-template",
-  "version": "0.0.1",
+  "name": "facility-management-dashboard",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2",
-    "lucide-react": "^0.441.0",
-    "recharts": "^2.12.7"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.18",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "@typescript-eslint/parser": "^5.54.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.50.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.1",
-    "typescript": "^5.5.4",
-    "vite": "^5.2.0",
-    "tailwindcss": "3.4.17",
-    "autoprefixer": "latest",
-    "postcss": "latest"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "^14.0.0",
+    "recharts": "^2.8.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
   }
 }
