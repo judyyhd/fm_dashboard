@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import { XIcon, CheckCircleIcon, PencilIcon, ClockIcon, CheckIcon, LoaderIcon } from 'lucide-react';
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+  topic: string;
+  status: string;
+};
 const ActionPlanModal = ({
   isOpen,
   onClose,
