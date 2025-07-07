@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-type DashboardData = Awaited<ReturnType<typeof fetchDashboardData>>;
+import type { DashboardResponse } from './api/energy-analysis';
 
-const fetchDashboardData = async (): Promise<DashboardData> => {
+const fetchDashboardData = async (): Promise<DashboardResponse> => {
   const res = await fetch('/api/energy-analysis', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' }
@@ -12,7 +12,7 @@ const fetchDashboardData = async (): Promise<DashboardData> => {
 };
 
 export default function Dashboard() {
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
