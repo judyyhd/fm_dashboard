@@ -17,7 +17,7 @@ const Dashboard = () => {
             maintenance_priorities: [],
             energy_optimization_insights: {
               hvac_inefficiencies: [],
-              maintenance_priorities: [] // Replace with actual input payload if needed
+              maintenance_priorities: []} // Replace with actual input payload if needed
         })
 
         if (!res.ok) throw new Error('Failed to fetch dashboard data')
