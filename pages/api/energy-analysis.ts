@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const dashboard = {
-    title: "Facility Energy Analysis Dashboard",
+    title: "Facility Management Dashboard",
     subtitle: "3 HVAC Issues Detected • 31.2°C Outdoor Temperature",
     summary: {
       totalEquipment: 4,
