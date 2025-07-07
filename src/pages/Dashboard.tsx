@@ -3,19 +3,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#ff7300'];
 
-useEffect(() => {
-  fetch('/api/energy-analysis', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({})
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log('Dashboard data:', data);
-    setDashboardData(data);
-  });
-}, []);
-
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
