@@ -20,6 +20,7 @@ const Dashboard = () => {
               maintenance_priorities: []
             } // Replace with actual input payload if needed
         })
+      })
 
         if (!res.ok) throw new Error('Failed to fetch dashboard data')
 
