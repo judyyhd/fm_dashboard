@@ -7,38 +7,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const dashboard = {
-    title: "Facility Management Dashboard",
+  const dashboardData = {
+    title: "Facility Energy Analysis Dashboard",
     subtitle: "3 HVAC Issues Detected • 31.2°C Outdoor Temperature",
     summary: {
       totalEquipment: 4,
       criticalIssues: 1,
       energyRecommendations: 3,
-      maintenanceItems: 4,
-      // outdoorTemp: "31.2",
-      // lastUpdated: new Date().toISOString()
+      maintenanceItems: 4
     },
     quickActions: [
       {
         id: "repair-ff0000000000e480",
-        title: "Repair Offline Equipment",
-        description: "Equipment status is Off while in cooling mode",
+        title: "Repair Cooling System",
+        description: "Equipment ff0000000000e480 requires immediate repair due to offline status during cooling mode",
         priority: "high",
-        icon: "alert-triangle",
+        icon: "alert-circle",
         color: "red"
       },
       {
         id: "adjust-ff0000000000bc21",
         title: "Adjust Temperature Setting",
-        description: "Increase from 5°C to recommended 22°C",
+        description: "Increase temperature setting from 5°C to recommended 22°C on equipment ff0000000000bc21",
         priority: "high",
         icon: "thermometer",
         color: "amber"
       },
       {
         id: "optimize-ff0000000000e4ac",
-        title: "Optimize Cooling System",
-        description: "Address elevated room temperature of 25.5°C",
+        title: "Optimize Cooling Performance",
+        description: "Check system efficiency for equipment ff0000000000e4ac due to elevated temperature",
         priority: "medium",
         icon: "settings",
         color: "blue"
@@ -47,8 +45,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     alerts: [
       {
         id: "alert-offline-cooling",
-        title: "Equipment Offline in Cooling Mode",
-        description: "Potential energy waste and inability to manage cooling load effectively",
+        title: "Cooling System Offline",
+        description: "Equipment status is Off while in cooling mode",
         equipment: "ff0000000000e480",
         severity: "high",
         icon: "power-off",
@@ -60,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         description: "Temperature setting of 5°C is below normal operating range",
         equipment: "ff0000000000bc21",
         severity: "high",
-        icon: "thermometer-snowflake",
+        icon: "thermometer-snow",
         color: "amber"
       },
       {
@@ -75,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ],
     widgets: [
       {
-        id: "outdoor-temp",
+        id: "outdoor-temperature",
         title: "Outdoor Temperature",
         value: 31.2,
         unit: "°C",
@@ -83,30 +81,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         color: "orange"
       },
       {
-        id: "feels-like",
-        title: "Feels Like",
-        value: 35.1,
+        id: "temperature-differential",
+        title: "Max Temperature Differential",
+        value: 26.2,
         unit: "°C",
-        icon: "thermometer",
+        icon: "git-fork",
+        color: "blue"
+      },
+      {
+        id: "critical-maintenance",
+        title: "Critical Maintenance Items",
+        value: 1,
+        icon: "tool",
         color: "red"
       },
       {
-        id: "heat-index",
-        title: "Heat Index",
-        value: 36.6,
-        unit: "°C",
-        icon: "flame",
-        color: "red"
-      },
-      {
-        id: "uv-index",
-        title: "UV Index",
-        value: 9.5,
-        icon: "sun",
-        color: "purple"
+        id: "energy-recommendations",
+        title: "Energy Recommendations",
+        value: 3,
+        icon: "lightbulb",
+        color: "green"
       }
     ]
   };
 
-  return res.status(200).json(dashboard);
+  return res.status(200).json(dashboardData);
 }
