@@ -15,8 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       criticalIssues: 1,
       energyRecommendations: 3,
       maintenanceItems: 4,
-      outdoorTemp: "31.2",
-      lastUpdated: new Date().toISOString()
+      // outdoorTemp: "31.2",
+      // lastUpdated: new Date().toISOString()
     },
     quickActions: [
       {
