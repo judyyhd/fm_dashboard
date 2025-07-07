@@ -34,7 +34,8 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
-
+  console.log('Dashboard response data:', data);
+  console.log('Widgets array:', data?.widgets);
   if (!data) return <p>Loading dashboard...</p>;
 
   return (
