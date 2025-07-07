@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
-
+import type { DashboardResponse } from '../../types/dashboard';
 const inputSchema = z.object({
   hvac_inefficiencies: z.array(z.object({
     equipment: z.string(),
