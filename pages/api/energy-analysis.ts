@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
-import type { DashboardResponse } from '../../types/dashboard';
+// import type { DashboardResponse } from '../../types/dashboard';
 const inputSchema = z.object({
   hvac_inefficiencies: z.array(z.object({
     equipment: z.string(),
@@ -37,7 +37,7 @@ export default async function handler(
   }
 
   try {
-    const input = inputSchema.parse(req.body)
+    const _input = inputSchema.parse(req.body)
     
     const dashboard = {
       title: "Facility Energy Analysis Dashboard",
