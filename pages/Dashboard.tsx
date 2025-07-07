@@ -4,23 +4,36 @@ import type { DashboardResponse } from '../types/dashboard'
 const Dashboard = () => {
   const [data, setData] = useState<DashboardResponse | null>(null)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/energy-analysis', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/energy-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          hvac_inefficiencies: [],
+          maintenance_priorities: [],
+          energy_optimization_insights: {
             hvac_inefficiencies: [],
-            maintenance_priorities: [],
-            energy_optimization_insights: {
-              hvac_inefficiencies: [],
-              maintenance_priorities: []
-            } // Replace with actual input payload if needed
+            maintenance_priorities: []
+          }
         })
-      })
+      });
+
+      if (!res.ok) throw new Error('Failed to fetch dashboard data');
+
+      const json = await res.json();
+      console.log('API response:', json); // ✅ This will now actually log
+      setData(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchData();
+}, []);
 
         if (!res.ok) throw new Error('Failed to fetch dashboard data')
 
