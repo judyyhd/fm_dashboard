@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import type { DashboardResponse } from './api/energy-analysis'
+import type { DashboardResponse } from '../types/dashboard'
 
 const Dashboard = () => {
   const [data, setData] = useState<DashboardResponse | null>(null)
