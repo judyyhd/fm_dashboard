@@ -2,9 +2,21 @@
 import React, { useState } from 'react';
 import { PlusIcon, FilterIcon, SlidersIcon, LayoutListIcon, ClipboardListIcon } from 'lucide-react';
 import { useWorkOrders } from '../contexts/WorkOrderContext';
-
+type WorkOrder = {
+  id: string;
+  issue: string;
+  location: string;
+  requestedBy: string;
+  assignedTo: string;
+  dueDate: string;
+  status: string;
+  priority: string;
+  description: string;
+  statusColor: string;
+  priorityColor: string;
+};
 const WorkOrders = () => {
-  const [workOrders, setWorkOrders] = useState([]);
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'assign'>('list');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const getWorkOrderStats = () => ({
