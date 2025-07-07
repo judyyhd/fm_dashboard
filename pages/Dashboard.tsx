@@ -70,9 +70,9 @@ export default function Dashboard() {
                   : 'bg-blue-100'
               }`}
             >
-              <h4 className="font-semibold">{alert.message}</h4>
+              <h4 className="font-semibold">{alert.title}</h4>
               <p className="text-sm text-gray-700 mt-1">
-                Equipment: {alert.equipment} | Severity: {alert.severity}
+                Description: {alert.description} | Severity: {alert.severity}
               </p>
             </div>
           ))}
