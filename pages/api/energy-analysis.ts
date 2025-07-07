@@ -7,8 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  let hvacIssues = req.body.hvac_inefficiencies || req.body.energy_optimization_insights?.hvac_inefficiencies || []
-  let weatherData = req.body.weather_impact_analysis || req.body.rawWeatherEnergyAnalysis || {}
+  const hvacIssues = req.body.hvac_inefficiencies || req.body.energy_optimization_insights?.hvac_inefficiencies || []
+  const weatherData = req.body.weather_impact_analysis || req.body.rawWeatherEnergyAnalysis || {}
 
   const dashboardResponse = {
     title: "Facility Energy Analysis Dashboard",
