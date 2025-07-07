@@ -47,9 +47,9 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {data.quickActions.map((qa) => (
             <div key={qa.id} className="bg-orange-100 p-4 rounded shadow">
-              <h3 className="text-md font-bold text-orange-800">{qa.label}</h3>
-              <p className="text-sm text-gray-700 mt-1">{qa.action}</p>
-              <p className="text-xs text-gray-500 mt-2">Equipment: {qa.equipment}</p>
+              <h3 className="text-md font-bold text-orange-800">{qa.title}</h3>
+              <p className="text-sm text-gray-700 mt-1">{qa.description}</p>
+              <p className="text-xs text-gray-500 mt-2">Priority: {qa.priority}</p>
             </div>
           ))}
         </div>
