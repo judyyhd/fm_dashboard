@@ -1,83 +1,112 @@
-export const config = { api: { bodyParser: true } }
+export const config = { api: { bodyParser: true } };
 
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const hvacIssues = req.body.hvac_inefficiencies || req.body.energy_optimization_insights?.hvac_inefficiencies || []
-  const weatherData = req.body.weather_impact_analysis || req.body.rawWeatherEnergyAnalysis || {}
-
-  const dashboardResponse = {
+  const dashboard = {
     title: "Facility Energy Analysis Dashboard",
-    subtitle: `${hvacIssues.length} HVAC Issues Detected • ${weatherData.outdoor_temperature || "31.2"}°C Outdoor Temperature`,
+    subtitle: "3 HVAC Issues Detected • 31.2°C Outdoor Temperature",
     summary: {
-      totalEquipment: 12,
-      criticalIssues: hvacIssues.length,
-      energyRecommendations: 5,
-      maintenanceItems: 8,
-      outdoorTemp: weatherData.outdoor_temperature || "31.2",
-      lastUpdated: weatherData.timestamp || new Date().toISOString()
+      totalEquipment: 4,
+      criticalIssues: 1,
+      energyRecommendations: 3,
+      maintenanceItems: 4,
+      outdoorTemp: "31.2",
+      lastUpdated: new Date().toISOString()
     },
     quickActions: [
       {
-        id: "optimize-hvac",
-        title: "Optimize HVAC Settings",
-        description: "Adjust temperature setpoints based on occupancy",
+        id: "repair-ff0000000000e480",
+        title: "Repair Offline Equipment",
+        description: "Equipment status is Off while in cooling mode",
+        priority: "high",
+        icon: "alert-triangle",
+        color: "red"
+      },
+      {
+        id: "adjust-ff0000000000bc21",
+        title: "Adjust Temperature Setting",
+        description: "Increase from 5°C to recommended 22°C",
         priority: "high",
         icon: "thermometer",
         color: "amber"
       },
       {
-        id: "schedule-maintenance",
-        title: "Schedule Maintenance",
-        description: "Regular system checkup required",
+        id: "optimize-ff0000000000e4ac",
+        title: "Optimize Cooling System",
+        description: "Address elevated room temperature of 25.5°C",
         priority: "medium",
-        icon: "tool",
+        icon: "settings",
         color: "blue"
       }
     ],
     alerts: [
       {
-        id: "hvac-inefficient",
-        title: "HVAC System Inefficiency",
-        description: "Unit running outside optimal parameters",
-        equipment: hvacIssues[0]?.equipment_id || "HVAC-001",
+        id: "alert-offline-cooling",
+        title: "Equipment Offline in Cooling Mode",
+        description: "Potential energy waste and inability to manage cooling load effectively",
+        equipment: "ff0000000000e480",
         severity: "high",
-        icon: "alert-triangle",
+        icon: "power-off",
         color: "red"
       },
       {
-        id: "maintenance-due",
-        title: "Maintenance Required",
-        description: "Regular maintenance schedule overdue",
-        equipment: hvacIssues[0]?.equipment_id || "HVAC-002",
-        severity: "medium",
-        icon: "tool",
+        id: "alert-low-temp",
+        title: "Abnormal Temperature Setting",
+        description: "Temperature setting of 5°C is below normal operating range",
+        equipment: "ff0000000000bc21",
+        severity: "high",
+        icon: "thermometer-snowflake",
         color: "amber"
+      },
+      {
+        id: "alert-high-temp",
+        title: "High Room Temperature",
+        description: "Room temperature of 25.5°C approaching upper limit",
+        equipment: "ff0000000000e4ac",
+        severity: "medium",
+        icon: "thermometer-sun",
+        color: "yellow"
       }
     ],
     widgets: [
       {
-        id: "energy-consumption",
-        title: "Energy Consumption",
-        value: 245.6,
-        unit: "kWh",
-        icon: "zap",
-        color: "green"
+        id: "outdoor-temp",
+        title: "Outdoor Temperature",
+        value: 31.2,
+        unit: "°C",
+        icon: "sun",
+        color: "orange"
       },
       {
-        id: "temperature",
-        title: "Average Temperature",
-        value: weatherData.outdoor_temperature || "31.2",
+        id: "feels-like",
+        title: "Feels Like",
+        value: 35.1,
         unit: "°C",
         icon: "thermometer",
-        color: "amber"
+        color: "red"
+      },
+      {
+        id: "heat-index",
+        title: "Heat Index",
+        value: 36.6,
+        unit: "°C",
+        icon: "flame",
+        color: "red"
+      },
+      {
+        id: "uv-index",
+        title: "UV Index",
+        value: 9.5,
+        icon: "sun",
+        color: "purple"
       }
     ]
-  }
+  };
 
-  return res.status(200).json(dashboardResponse)
+  return res.status(200).json(dashboard);
 }
