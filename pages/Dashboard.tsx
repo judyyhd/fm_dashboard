@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import type { DashboardResponse } from './api/energy-analysis';
 
-const fetchDashboardData = async (): Promise<DashboardData> => {
+const fetchDashboardData = async (): Promise<DashboardResponse> => {
   const res = await fetch('/api/energy-analysis', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' }
