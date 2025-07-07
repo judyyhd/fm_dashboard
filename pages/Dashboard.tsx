@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import type { DashboardResponse } from '../types/dashboard';
+import React, { useEffect, useState } from 'react'
+import type { DashboardResponse } from '../types/dashboard'
 
 const Dashboard = () => {
-  const [data, setData] = useState<DashboardResponse | null>(null);
+  const [data, setData] = useState<DashboardResponse | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -10,38 +10,38 @@ const Dashboard = () => {
         const res = await fetch('/api/energy-analysis', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             hvac_inefficiencies: [],
             maintenance_priorities: [],
             energy_optimization_insights: {
               hvac_inefficiencies: [],
-              maintenance_priorities: [],
-            },
-          }),
-        });
+              maintenance_priorities: []
+            }
+          })
+        })
 
-        if (!res.ok) throw new Error('Failed to fetch dashboard data');
+        if (!res.ok) throw new Error('Failed to fetch dashboard data')
 
-        const json = await res.json();
-        console.log('API response:', json); // ✅ This should now log
-        setData(json);
+        const json = await res.json()
+        console.log('API response:', json)
+        setData(json)
       } catch (error) {
-        console.error('Dashboard fetch error:', error);
+        console.error(error)
       }
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
-  if (!data) return <p>Loading dashboard...</p>;
+  if (!data) return <p>Loading dashboard...</p>
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-2">{data.title}</h1>
-      <p className="text-gray-600 mb-4">{data.subtitle}</p>
-      <p className="text-gray-500 text-sm mb-6">Last updated: {data.summary.lastUpdated}</p>
+      <p className="text-gray-600 mb-1">{data.subtitle}</p>
+      <p className="text-xs text-gray-400 mb-4">Last updated: {data.summary.lastUpdated}</p>
 
       {/* Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -99,7 +99,7 @@ const Dashboard = () => {
       </div>
 
       {/* Widgets */}
-      <div className="mb-6 border-4 border-green-500 p-4">
+      <div className="mb-6 border-2 border-green-300 p-4">
         <h2 className="text-xl font-semibold mb-2">Status Widgets</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {data.widgets.map((widget) => (
@@ -113,7 +113,8 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-  );
-};
+    </div>
+  )
+}
 
-export default Dashboard;
+export default Dashboard
