@@ -1,7 +1,11 @@
-import type { AppProps } from 'next/app'
-// import { DashboardProvider } from '../contexts/DashboardContext'
-import '../index.css' // If you have global styles
+import { DashboardProvider } from '@/contexts/DashboardContext';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps }) {
+  return (
+    <DashboardProvider>
+      <Component {...pageProps} />
+    </DashboardProvider>
+  );
 }
+
+export default MyApp;
