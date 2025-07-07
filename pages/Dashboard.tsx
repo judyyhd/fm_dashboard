@@ -25,23 +25,23 @@ const Dashboard = () => {
         if (!res.ok) throw new Error('Failed to fetch dashboard data');
 
         const json = await res.json();
-        console.log('API response:', json);
+        console.log('API response:', json); // ✅ This should now log
         setData(json);
       } catch (error) {
-        console.error(error);
+        console.error('Dashboard fetch error:', error);
       }
     };
 
     fetchData();
   }, []);
-  console.log('Dashboard response data:', data);
-  console.log('Widgets array:', data?.widgets);
+
   if (!data) return <p>Loading dashboard...</p>;
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-2">{data.title}</h1>
       <p className="text-gray-600 mb-4">{data.subtitle}</p>
+      <p className="text-gray-500 text-sm mb-6">Last updated: {data.summary.lastUpdated}</p>
 
       {/* Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
