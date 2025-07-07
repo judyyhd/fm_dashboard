@@ -4,7 +4,7 @@ import { PlusIcon, FilterIcon, SlidersIcon, LayoutListIcon, ClipboardListIcon } 
 import { useWorkOrders } from '../contexts/WorkOrderContext';
 
 const WorkOrders = () => {
-  const { workOrders, addWorkOrder, getWorkOrderStats } = useWorkOrders();
+  const [workOrders, setWorkOrders] = useState([]);
   const [viewMode, setViewMode] = useState<'list' | 'assign'>('list');
   const [showCreateModal, setShowCreateModal] = useState(false);
   
@@ -12,16 +12,21 @@ const WorkOrders = () => {
 
   // Simple demo function to create a work order
   const createDemoWorkOrder = () => {
-    addWorkOrder({
+    const newWorkOrder = {
+      id: `WO-${Date.now()}`,
       issue: "Demo Work Order",
       location: "Building A, Floor 1",
       requestedBy: "Demo User",
       assignedTo: "Unassigned",
-      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 7 days from now
+      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
       status: "Open",
       priority: "Medium",
-      description: "This is a demo work order created by clicking the button"
-    });
+      description: "This is a demo work order created by clicking the button",
+      statusColor: "bg-yellow-100 text-yellow-800",
+      priorityColor: "bg-blue-100 text-blue-800"
+    };
+    
+    setWorkOrders(prev => [...prev, newWorkOrder]);
   };
 
   const renderEmptyState = () => (
