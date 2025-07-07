@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-type DashboardResponse = {
+export type DashboardResponse = {
   title: string
   subtitle: string
   summary: {
