@@ -7,6 +7,12 @@ const WorkOrders = () => {
   const [workOrders, setWorkOrders] = useState([]);
   const [viewMode, setViewMode] = useState<'list' | 'assign'>('list');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const getWorkOrderStats = () => ({
+    total: workOrders.length,
+    inProgress: workOrders.filter(wo => wo.status === 'In Progress').length,
+    highPriority: workOrders.filter(wo => wo.priority === 'High').length,
+    unassigned: workOrders.filter(wo => wo.assignedTo === 'Unassigned').length,
+  });
   
   const stats = getWorkOrderStats();
 
