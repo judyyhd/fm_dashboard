@@ -1,3 +1,9 @@
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+}
+
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
 // import type { DashboardResponse } from '../../types/dashboard';
