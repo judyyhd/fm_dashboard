@@ -24,7 +24,8 @@ const Dashboard = () => {
 
         if (!res.ok) throw new Error('Failed to fetch dashboard data')
 
-        const json = await res.json()
+        const json = await res.json();
+        console.log('API response:', json);
         setData(json)
       } catch (error) {
         console.error(error)
