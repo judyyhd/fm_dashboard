@@ -1,3 +1,5 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
 useEffect(() => {
   fetch('/api/energy-analysis', {
     method: 'POST', 
