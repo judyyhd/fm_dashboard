@@ -12,7 +12,7 @@ const fetchDashboardData = async (): Promise<DashboardResponse> => {
 };
 
 export default function Dashboard() {
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
