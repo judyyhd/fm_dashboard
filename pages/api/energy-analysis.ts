@@ -37,7 +37,8 @@ export default async function handler(
   }
 
   try {
-    const _input = inputSchema.parse(req.body)
+    const input = inputSchema.parse(req.body);
+    console.log("Received input:", input);
     
     const dashboard = {
       title: "Facility Energy Analysis Dashboard",
