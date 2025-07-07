@@ -60,7 +60,16 @@ export default function Dashboard() {
         <h2 className="text-xl font-semibold mb-2">AI-Suggested Alerts</h2>
         <div className="space-y-3">
           {data.alerts.map((alert) => (
-            <div key={alert.id} className={`p-4 rounded shadow ${alert.type === 'error' ? 'bg-red-100' : alert.type === 'warning' ? 'bg-yellow-100' : 'bg-blue-100'}`}>
+            <div
+              key={alert.id}
+              className={`p-4 rounded shadow ${
+                alert.severity === 'high'
+                  ? 'bg-red-100'
+                  : alert.severity === 'medium'
+                  ? 'bg-yellow-100'
+                  : 'bg-blue-100'
+              }`}
+            >
               <h4 className="font-semibold">{alert.message}</h4>
               <p className="text-sm text-gray-700 mt-1">
                 Equipment: {alert.equipment} | Severity: {alert.severity}
