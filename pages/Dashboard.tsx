@@ -9,9 +9,7 @@ const Dashboard = () => {
       try {
         const res = await fetch('/api/energy-analysis', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             hvac_inefficiencies: [],
             maintenance_priorities: [],
@@ -41,21 +39,21 @@ const Dashboard = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-2">{data.title}</h1>
       <p className="text-gray-600 mb-1">{data.subtitle}</p>
-      <p className="text-xs text-gray-400 mb-4">Last updated: {data.summary.lastUpdated}</p>
+      <p className="text-gray-400 text-sm mb-4">Last updated: {data.summary.lastUpdated}</p>
 
-      {/* Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="p-4 bg-white rounded shadow">
-          <p className="text-lg font-semibold">Total Equipment</p>
-          <p>{data.summary.totalEquipment}</p>
-        </div>
-        <div className="p-4 bg-white rounded shadow">
-          <p className="text-lg font-semibold">Critical Issues</p>
-          <p>{data.summary.criticalIssues}</p>
-        </div>
-        <div className="p-4 bg-white rounded shadow">
-          <p className="text-lg font-semibold">Outdoor Temp</p>
-          <p>{data.summary.outdoorTemp}°C</p>
+      {/* Widgets - NOW AT THE TOP */}
+      <div className="mb-6 bg-gray-100 p-4 rounded shadow border border-gray-300">
+        <h2 className="text-xl font-semibold mb-2">Status Widgets</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {data.widgets.map((widget) => (
+            <div key={widget.id} className="bg-white p-4 rounded shadow">
+              <p className="text-sm font-semibold text-gray-600">{widget.title}</p>
+              <p className="text-2xl font-bold text-gray-800">
+                {widget.value}
+                {widget.unit ? ` ${widget.unit}` : ''}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -92,22 +90,6 @@ const Dashboard = () => {
               <p className="text-sm text-gray-700 mt-1">{alert.description}</p>
               <p className="text-xs text-gray-500 mt-2">
                 Equipment: {alert.equipment} | Severity: {alert.severity}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Widgets */}
-      <div className="mb-6 border-2 border-green-300 p-4">
-        <h2 className="text-xl font-semibold mb-2">Status Widgets</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {data.widgets.map((widget) => (
-            <div key={widget.id} className="bg-white p-4 rounded shadow">
-              <p className="text-sm font-semibold text-gray-600">{widget.title}</p>
-              <p className="text-2xl font-bold text-gray-800">
-                {widget.value}
-                {widget.unit ? ` ${widget.unit}` : ''}
               </p>
             </div>
           ))}
