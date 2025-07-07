@@ -3,7 +3,12 @@ import { XIcon, CheckCircleIcon, PencilIcon, ClockIcon, CheckIcon, LoaderIcon } 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  topic: string;
+  onImplement: () => void;
+  topic: {
+    title: string;
+    icon: JSX.Element;
+    iconBg: string;
+  };
   status: string;
 };
 const ActionPlanModal = ({
@@ -11,8 +16,8 @@ const ActionPlanModal = ({
   onClose,
   topic,
   status,
-  onImplement
-}) => {
+  onImplement,
+}: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [planText, setPlanText] = useState(`1. Conduct energy audit across all buildings\n2. Identify top energy consumption sources\n3. Implement LED lighting upgrades\n4. Install smart thermostats and sensors\n5. Optimize HVAC scheduling\n6. Train facility staff on energy conservation\n7. Implement power management for office equipment\n8. Monitor and report on energy usage trends`);
   if (!isOpen) return null;
