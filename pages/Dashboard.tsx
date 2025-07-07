@@ -19,7 +19,7 @@ useEffect(() => {
             hvac_inefficiencies: [],
             maintenance_priorities: []
           }
-        })
+        }),
       });
 
       if (!res.ok) throw new Error('Failed to fetch dashboard data');
