@@ -1,54 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import type { DashboardResponse } from '../types/dashboard'
+import React, { useEffect, useState } from 'react';
+import type { DashboardResponse } from '../types/dashboard';
 
 const Dashboard = () => {
-  const [data, setData] = useState<DashboardResponse | null>(null)
+  const [data, setData] = useState<DashboardResponse | null>(null);
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await fetch('/api/energy-analysis', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          hvac_inefficiencies: [],
-          maintenance_priorities: [],
-          energy_optimization_insights: {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('/api/energy-analysis', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
             hvac_inefficiencies: [],
-            maintenance_priorities: []
-          }
-        }),
-      });
+            maintenance_priorities: [],
+            energy_optimization_insights: {
+              hvac_inefficiencies: [],
+              maintenance_priorities: [],
+            },
+          }),
+        });
 
-      if (!res.ok) throw new Error('Failed to fetch dashboard data');
-
-      const json = await res.json();
-      console.log('API response:', json); // ✅ This will now actually log
-      setData(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  fetchData();
-}, []);
-
-        if (!res.ok) throw new Error('Failed to fetch dashboard data')
+        if (!res.ok) throw new Error('Failed to fetch dashboard data');
 
         const json = await res.json();
         console.log('API response:', json);
-        setData(json)
+        setData(json);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
-  if (!data) return <p>Loading dashboard...</p>
+  if (!data) return <p>Loading dashboard...</p>;
 
   return (
     <div className="p-6">
@@ -126,7 +113,7 @@ useEffect(() => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
