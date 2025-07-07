@@ -99,7 +99,7 @@ const Dashboard = () => {
       </div>
 
       {/* Widgets */}
-      <div className="mb-6">
+      <div className="mb-6 border-4 border-green-500 p-4">
         <h2 className="text-xl font-semibold mb-2">Status Widgets</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {data.widgets.map((widget) => (
@@ -113,7 +113,6 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-    </div>
   );
 };
 
