@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-type DashboardData = Awaited<ReturnType<typeof fetchDashboardData>>;
+import type { DashboardResponse } from './api/energy-analysis';
 
 const fetchDashboardData = async (): Promise<DashboardData> => {
   const res = await fetch('/api/energy-analysis', {
