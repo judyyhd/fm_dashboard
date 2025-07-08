@@ -1,11 +1,14 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import Layout from '../components/layout';
+import Sidebar from '../components/sidebar';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar />
+      <main className="flex-1 p-6 overflow-auto">
+        <Component {...pageProps} />
+      </main>
+    </div>
   );
 }

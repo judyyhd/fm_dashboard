@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from 'recharts';
+import { Zap, Shield, Wifi, Wrench, Boxes } from 'lucide-react';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#ff7300'];
 
@@ -89,7 +90,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="p-6 space-y-8">
       {/* Dynamic Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -117,15 +118,45 @@ const Dashboard = () => {
 
       {/* Dynamic Summary Cards */}
       {dashboardData.summary && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {Object.entries(dashboardData.summary).map(([key, value]) => (
-            <div key={key} className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-sm font-medium text-gray-600 uppercase tracking-wider">
-                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-              </h3>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {Object.entries(dashboardData.summary).map(([key, value], index) => {
+            // Define icons for each card type
+            const getIcon = (key, index) => {
+              if (key.toLowerCase().includes('equipment')) return <Boxes size={18} />;
+              if (key.toLowerCase().includes('energy')) return <Zap size={18} />;
+              if (key.toLowerCase().includes('critical') || key.toLowerCase().includes('issues')) return <Shield size={18} />;
+              if (key.toLowerCase().includes('maintenance')) return <Wrench size={18} />;
+              // Default icons based on position
+              const icons = [<Boxes size={18} />, <Shield size={18} />, <Zap size={18} />, <Wrench size={18} />];
+              return icons[index % icons.length];
+            };
+
+            const getIconStyle = (key, index) => {
+              if (key.toLowerCase().includes('equipment')) return 'card-icon equipment';
+              if (key.toLowerCase().includes('energy')) return 'card-icon energy'; 
+              if (key.toLowerCase().includes('critical') || key.toLowerCase().includes('issues')) return 'card-icon critical';
+              if (key.toLowerCase().includes('maintenance')) return 'card-icon maintenance';
+              // Default styles based on position
+              const styles = ['card-icon equipment', 'card-icon critical', 'card-icon energy', 'card-icon maintenance'];
+              return styles[index % styles.length];
+            };
+
+            return (
+              <div key={key} className="bg-white rounded-lg shadow p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start" style={{ gap: '1rem' }}>
+                    <div className={getIconStyle(key, index)}>
+                      {getIcon(key, index)}
+                    </div>
+                    <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wider leading-tight">
+                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                    </h3>
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{value}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -137,119 +168,23 @@ const Dashboard = () => {
             {dashboardData.quickActions.map((action, index) => (
               <div 
                 key={action.id || index} 
-                className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                  action.priority === 'high' || action.color === 'red' ? 'border-red-200 bg-red-50 hover:bg-red-100' :
-                  action.priority === 'medium' || action.color === 'amber' ? 'border-orange-200 bg-orange-50 hover:bg-orange-100' :
-                  'border-blue-200 bg-blue-50 hover:bg-blue-100'
-                }`}
+                className="p-6 rounded-lg border border-gray-200 bg-white cursor-pointer transition-colors hover:bg-gray-50"
               >
-                <h3 className="font-medium text-gray-900">{action.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">{action.description}</p>
-                {action.priority && (
-                  <span className={`inline-block px-2 py-1 text-xs rounded mt-2 ${
-                    action.priority === 'high' ? 'bg-red-100 text-red-800' :
-                    action.priority === 'medium' ? 'bg-orange-100 text-orange-800' :
-                    'bg-blue-100 text-blue-800'
-                  }`}>
-                    {action.priority} priority
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Dynamic Alerts - Updated to use agent's structure */}
-      {dashboardData.alerts && dashboardData.alerts.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">System Alerts</h2>
-          <div className="space-y-3">
-            {dashboardData.alerts.map((alert, index) => (
-              <div 
-                key={alert.id || index} 
-                className={`p-4 rounded-lg border ${
-                  alert.severity === 'high' || alert.color === 'red' ? 'bg-red-50 border-red-200' :
-                  alert.severity === 'medium' || alert.color === 'amber' || alert.color === 'yellow' ? 'bg-yellow-50 border-yellow-200' :
-                  'bg-blue-50 border-blue-200'
-                }`}
-              >
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <div className={`w-3 h-3 rounded-full mt-1 ${
-                      alert.severity === 'high' || alert.color === 'red' ? 'bg-red-500' :
-                      alert.severity === 'medium' || alert.color === 'amber' || alert.color === 'yellow' ? 'bg-yellow-500' :
-                      'bg-blue-500'
-                    }`}></div>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="font-medium text-gray-900">{alert.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{alert.description}</p>
-                    {alert.equipment && (
-                      <p className="text-xs text-gray-500 mt-1">Equipment: {alert.equipment}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Enhanced Widgets Section - Updated for agent's structure */}
-      {dashboardData.widgets && dashboardData.widgets.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Status Widgets</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {dashboardData.widgets.map((widget, index) => (
-              <div key={widget.id || index} className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      widget.color === 'red' ? 'bg-red-100' :
-                      widget.color === 'orange' ? 'bg-orange-100' :
-                      widget.color === 'purple' ? 'bg-purple-100' :
-                      'bg-blue-100'
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-medium text-gray-900 flex-1 pr-2">{action.title}</h3>
+                  {action.priority && (
+                    <span className={`px-2 py-0.5 text-sm font-bold rounded whitespace-nowrap flex-shrink-0 ${
+                      action.priority === 'high' ? 'bg-red-100 text-red-800' :
+                      action.priority === 'medium' ? 'bg-orange-100 text-orange-800' :
+                      'bg-blue-100 text-blue-800'
                     }`}>
-                      <div className={`w-4 h-4 rounded-full ${
-                        widget.color === 'red' ? 'bg-red-500' :
-                        widget.color === 'orange' ? 'bg-orange-500' :
-                        widget.color === 'purple' ? 'bg-purple-500' :
-                        'bg-blue-500'
-                      }`}></div>
-                    </div>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-500">{widget.title}</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                      {widget.value || widget.data || 'N/A'}
-                      {widget.unit && <span className="text-sm text-gray-500 ml-1">{widget.unit}</span>}
-                    </p>
-                  </div>
+                      {action.priority === 'medium' ? 'medium' : action.priority}
+                    </span>
+                  )}
                 </div>
+                <p className="text-sm text-gray-600">{action.description}</p>
               </div>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Additional Chart Widgets (if you want to add bar charts later) */}
-      {dashboardData.chartData && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Equipment Status</h2>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={dashboardData.chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="count" fill="#3b82f6" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
           </div>
         </div>
       )}
