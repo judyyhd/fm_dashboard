@@ -3,7 +3,20 @@ import { Zap, Shield, Wrench, Boxes } from 'lucide-react';
 
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState<any>(null);
+  interface DashboardData {
+    title?: string;
+    subtitle?: string;
+    summary?: Record<string, string | number>;
+    quickActions?: Array<{
+      id?: string;
+      title: string;
+      description: string;
+      priority?: 'high' | 'medium' | 'low';
+      color?: string;
+    }>;
+  }
+
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
