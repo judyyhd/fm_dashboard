@@ -132,7 +132,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {Object.entries(dashboardData.summary).map(([key, value], index) => {
             // Define icons for each card type
-            const getIcon = (key, index) => {
+            const getIcon = (key: string, index: number) => {
               if (key.toLowerCase().includes('equipment')) return <Boxes size={18} />;
               if (key.toLowerCase().includes('energy')) return <Zap size={18} />;
               if (key.toLowerCase().includes('critical') || key.toLowerCase().includes('issues')) return <Shield size={18} />;
@@ -142,7 +142,7 @@ const Dashboard = () => {
               return icons[index % icons.length];
             };
 
-            const getIconStyle = (key, index) => {
+            const getIconStyle = (key: string, index: number) => {
               if (key.toLowerCase().includes('equipment')) return 'card-icon equipment';
               if (key.toLowerCase().includes('energy')) return 'card-icon energy'; 
               if (key.toLowerCase().includes('critical') || key.toLowerCase().includes('issues')) return 'card-icon critical';
