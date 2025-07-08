@@ -2,78 +2,81 @@ export const config = { api: { bodyParser: true } };
 
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const dashboardData = {
+  const dashboard = {
     title: "Facility Energy Analysis Dashboard",
     subtitle: "3 HVAC Issues Detected • 31.2°C Outdoor Temperature",
     summary: {
-      totalEquipment: 4,
-      criticalIssues: 1,
+      totalEquipment: 3,
+      criticalIssues: 2,
       energyRecommendations: 3,
-      maintenanceItems: 4
+      maintenanceItems: 3
     },
     quickActions: [
       {
-        id: "repair-ff0000000000e480",
-        title: "Repair Cooling System",
-        description: "Equipment ff0000000000e480 requires immediate repair due to offline status during cooling mode",
+        id: "increase-temp-setpoint",
+        title: "Increase Temperature Setpoints",
+        description: "Raise setpoints to 22°C for units ff0000000000bc21 and ff0000000000e489",
         priority: "high",
-        icon: "alert-circle",
+        icon: "thermometer",
         color: "red"
       },
       {
-        id: "adjust-ff0000000000bc21",
-        title: "Adjust Temperature Setting",
-        description: "Increase temperature setting from 5°C to recommended 22°C on equipment ff0000000000bc21",
-        priority: "high",
-        icon: "thermometer",
+        id: "repair-keylock",
+        title: "Repair Keylock Mechanism",
+        description: "Fix keylock issues on unit ff0000000000e4a5",
+        priority: "medium",
+        icon: "key",
         color: "amber"
       },
       {
-        id: "optimize-ff0000000000e4ac",
-        title: "Optimize Cooling Performance",
-        description: "Check system efficiency for equipment ff0000000000e4ac due to elevated temperature",
-        priority: "medium",
-        icon: "settings",
+        id: "standardize-fan-speed",
+        title: "Standardize Fan Speeds",
+        description: "Optimize fan speed settings across all units",
+        priority: "low",
+        icon: "fan",
         color: "blue"
       }
     ],
     alerts: [
       {
-        id: "alert-offline-cooling",
-        title: "Cooling System Offline",
-        description: "Equipment status is Off while in cooling mode",
-        equipment: "ff0000000000e480",
+        id: "critical-low-temp",
+        title: "Critical Low Temperature Setting",
+        description: "Units operating at 5°C and 6°C setpoints",
+        equipment: "ff0000000000bc21, ff0000000000e489",
         severity: "high",
-        icon: "power-off",
+        icon: "alert-triangle",
         color: "red"
       },
       {
-        id: "alert-low-temp",
-        title: "Abnormal Temperature Setting",
-        description: "Temperature setting of 5°C is below normal operating range",
-        equipment: "ff0000000000bc21",
-        severity: "high",
-        icon: "thermometer-snow",
+        id: "keylock-malfunction",
+        title: "Equipment Malfunction",
+        description: "Keylock mechanism issue detected",
+        equipment: "ff0000000000e4a5",
+        severity: "medium",
+        icon: "alert-circle",
         color: "amber"
       },
       {
-        id: "alert-high-temp",
-        title: "High Room Temperature",
-        description: "Room temperature of 25.5°C approaching upper limit",
-        equipment: "ff0000000000e4ac",
-        severity: "medium",
-        icon: "thermometer-sun",
+        id: "fan-speed-variance",
+        title: "Inconsistent Fan Speed Settings",
+        description: "High variance in fan speeds detected across units",
+        equipment: "All HVAC units",
+        severity: "low",
+        icon: "alert-octagon",
         color: "yellow"
       }
     ],
     widgets: [
       {
-        id: "outdoor-temperature",
+        id: "outdoor-temp",
         title: "Outdoor Temperature",
         value: 31.2,
         unit: "°C",
@@ -81,29 +84,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         color: "orange"
       },
       {
-        id: "temperature-differential",
-        title: "Max Temperature Differential",
-        value: 26.2,
+        id: "heat-index",
+        title: "Heat Index",
+        value: 36.6,
         unit: "°C",
-        icon: "git-fork",
-        color: "blue"
-      },
-      {
-        id: "critical-maintenance",
-        title: "Critical Maintenance Items",
-        value: 1,
-        icon: "tool",
+        icon: "thermometer-sun",
         color: "red"
       },
       {
-        id: "energy-recommendations",
-        title: "Energy Recommendations",
-        value: 3,
-        icon: "lightbulb",
+        id: "energy-savings",
+        title: "Potential Energy Savings",
+        value: "15-20",
+        unit: "%",
+        icon: "trending-down",
         color: "green"
+      },
+      {
+        id: "uv-index",
+        title: "UV Index",
+        value: 9.5,
+        icon: "sun-medium",
+        color: "purple"
       }
     ]
   };
 
-  return res.status(200).json(dashboardData);
+  return res.status(200).json(dashboard);
 }
