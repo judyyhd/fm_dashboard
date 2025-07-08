@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Boxes, Shield, Zap, Wrench, AlertTriangle, Thermometer, Clock } from 'lucide-react';
+import { FC, useEffect, useState } from 'react';
+import { Boxes, Shield, Wrench, Zap, AlertTriangle, Thermometer, Clock } from 'lucide-react';
 
 interface DashboardData {
   summary: {
@@ -16,6 +16,7 @@ interface DashboardData {
         description: string;
       };
     };
+    key_message: string;
   };
   priority_alerts: Array<{
     id: string;
@@ -26,74 +27,71 @@ interface DashboardData {
     timeline: string;
   }>;
   action_plan: {
-    immediate: { actions: Array<{
-      priority: number;
-      description: string;
-      timeline: string;
-    }>};
-    today: { actions: Array<{
-      priority: number;
-      description: string;
-      timeline: string;
-    }>};
+    immediate: { actions: Array<any> };
+    today: { actions: Array<any> };
+    this_week: { actions: Array<any> };
   };
   business_impact: {
     energy_savings: {
       immediate: string;
       short_term: string;
+      long_term: string;
     };
     comfort: {
       severity: string;
     };
+    cost_benefit: string;
   };
 }
 
-export default function Dashboard() {
+const Dashboard: FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDashboardData();
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/equipment-analysis', {
+          method: 'POST'
+        });
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const json = await response.json();
+        setData(json);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      const response = await fetch('/api/dashboard', {
-        method: 'POST'
-      });
-      if (!response.ok) throw new Error('Failed to fetch dashboard data');
-      const json = await response.json();
-      setData(json);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) return <div className="p-8">Loading...</div>;
   if (error) return <div className="p-8 text-red-500">{error}</div>;
   if (!data) return null;
 
   const summaryData = {
-    'Total Equipment Issues': data.summary.metrics.total_issues,
-    'Critical Issues': data.summary.metrics.critical_issues,
-    'Energy Savings Potential': `${data.summary.metrics.potential_savings.value}%`,
-    'Maintenance Actions': data.action_plan.immediate.actions.length + data.action_plan.today.actions.length
+    'Total Issues': data.summary.metrics.total_issues,
+    'Critical Issues': data.summary.metrics.critical_issues, 
+    'Energy Savings': `${data.summary.metrics.potential_savings.value}%`,
+    'Action Items': data.action_plan.immediate.actions.length + 
+                   data.action_plan.today.actions.length +
+                   data.action_plan.this_week.actions.length
   };
 
   return (
     <div className="p-8">
       {/* Status Banner */}
-      <div className={`mb-8 p-4 rounded-lg ${data.summary.status.level === 'critical' ? 'bg-red-100' : 'bg-yellow-100'}`}>
+      <div className={`mb-8 p-4 rounded-lg bg-red-50 border border-red-200`}>
         <div className="flex items-center gap-2">
-          <AlertTriangle size={20} className="text-red-600" />
-          <span className="font-medium">{data.summary.status.message}</span>
+          <AlertTriangle className="text-red-500" size={20} />
+          <h2 className="font-semibold text-red-700">{data.summary.status.message}</h2>
         </div>
+        <p className="mt-2 text-red-600">{data.summary.key_message}</p>
       </div>
 
-      {/* Summary Cards Section */}
+      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {Object.entries(summaryData).map(([key, value], index) => {
           const getIcon = (key: string, index: number) => {
@@ -141,9 +139,12 @@ export default function Dashboard() {
               <div className="flex items-center gap-3 mb-2">
                 <Thermometer className="text-red-500" size={20} />
                 <h3 className="font-medium">{alert.title}</h3>
+                <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">
+                  {alert.severity}
+                </span>
               </div>
               <p className="text-gray-600 mb-2">{alert.description}</p>
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Clock size={16} />
                 <span>{alert.timeline}</span>
               </div>
@@ -152,38 +153,60 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Action Plans */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Immediate Actions</h2>
-          <div className="bg-white rounded-lg shadow">
-            {data.action_plan.immediate.actions.map((action, index) => (
-              <div key={index} className="p-4 border-b last:border-b-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-medium">Priority {action.priority}</span>
+      {/* Action Plan */}
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-4">Action Plan</h2>
+        <div className="grid gap-4">
+          {Object.entries(data.action_plan).map(([timeframe, plan]) => (
+            <div key={timeframe} className="bg-white rounded-lg shadow p-4">
+              <h3 className="font-medium mb-3 capitalize">{timeframe}</h3>
+              {plan.actions.map((action, i) => (
+                <div key={i} className="flex items-start gap-3 mb-2">
+                  <div className="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">
+                    {action.priority}
+                  </div>
+                  <div>
+                    <p>{action.description}</p>
+                    <p className="text-sm text-gray-500">{action.timeline}</p>
+                  </div>
                 </div>
-                <p className="text-gray-600">{action.description}</p>
-                <span className="text-sm text-gray-500 mt-2 block">{action.timeline}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ))}
         </div>
+      </div>
 
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Business Impact</h2>
-          <div className="bg-white rounded-lg shadow p-4">
-            <div className="mb-4">
-              <h3 className="font-medium mb-2">Energy Savings</h3>
-              <p>Immediate: {data.business_impact.energy_savings.immediate}</p>
-              <p>Short Term: {data.business_impact.energy_savings.short_term}</p>
+      {/* Business Impact */}
+      <div>
+        <h2 className="text-lg font-semibold mb-4">Business Impact</h2>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="grid gap-4">
+            <div>
+              <h3 className="font-medium mb-2">Energy Savings Potential</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center">
+                  <p className="text-sm text-gray-500">Immediate</p>
+                  <p className="font-bold">{data.business_impact.energy_savings.immediate}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-500">Short Term</p>
+                  <p className="font-bold">{data.business_impact.energy_savings.short_term}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-500">Long Term</p>
+                  <p className="font-bold">{data.business_impact.energy_savings.long_term}</p>
+                </div>
+              </div>
             </div>
             <div>
-              <h3 className="font-medium mb-2">Comfort Impact</h3>
-              <p>Severity: {data.business_impact.comfort.severity}</p>
+              <h3 className="font-medium mb-2">Cost-Benefit Analysis</h3>
+              <p className="text-gray-600">{data.business_impact.cost_benefit}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Dashboard;
