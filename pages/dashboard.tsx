@@ -6,7 +6,7 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   // Fetch dashboard data from API
   useEffect(() => {
