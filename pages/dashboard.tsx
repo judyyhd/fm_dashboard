@@ -3,9 +3,9 @@ import { Zap, Shield, Wrench, Boxes } from 'lucide-react';
 
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   // Fetch dashboard data from API
@@ -33,7 +33,7 @@ const Dashboard = () => {
         
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
       } finally {
         setLoading(false);
       }
