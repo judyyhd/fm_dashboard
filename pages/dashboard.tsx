@@ -1,204 +1,269 @@
 import React, { useEffect, useState } from 'react';
-import { Zap, Shield, Wrench, Boxes } from 'lucide-react';
+import { AlertTriangle, Thermometer, RefreshCw, Clock } from 'lucide-react';
+import styles from './Dashboard.module.css';
 
+interface DashboardData {
+  summary: {
+    status: {
+      level: string;
+      icon: string;
+      color: string;
+      message: string;
+      timestamp: string;
+      confidence: string;
+    };
+    metrics: {
+      total_issues: number;
+      critical_issues: number;
+      potential_savings: {
+        value: number;
+        unit: string;
+        description: string;
+      };
+    };
+    key_message: string;
+  };
+  priority_alerts: Array<{
+    id: string;
+    severity: string;
+    icon: string;
+    equipment: string[];
+    title: string;
+    description: string;
+    action: string;
+    timeline: string;
+    impact: {
+      business: string;
+      savings?: string;
+      benefit?: string;
+      risk: string;
+    };
+    resources: {
+      type: string;
+      cost: string;
+    };
+  }>;
+  action_plan: {
+    immediate: { actions: Action[] };
+    today: { actions: Action[] };
+    this_week: { actions: Action[] };
+  };
+  insights: {
+    patterns: Pattern[];
+    trends: Trend[];
+  };
+  business_impact: {
+    energy_savings: {
+      immediate: string;
+      short_term: string;
+      long_term: string;
+    };
+    comfort: {
+      severity: string;
+    };
+    risks: Risk[];
+    cost_benefit: string;
+  };
+  resources: {
+    internal_hours: number;
+    contractor_needed: boolean;
+    specialist_needed: boolean;
+    estimated_cost: string;
+    budget_approval: boolean;
+    procurement: any[];
+  };
+  next_steps: {
+    immediate: string;
+    decisions: Decision[];
+    follow_up: FollowUp[];
+  };
+}
 
-const Dashboard = () => {
-  interface DashboardData {
-    title?: string;
-    subtitle?: string;
-    summary?: Record<string, string | number>;
-    quickActions?: Array<{
-      id?: string;
-      title: string;
-      description: string;
-      priority?: 'high' | 'medium' | 'low';
-      color?: string;
-    }>;
-  }
+interface Action {
+  priority: number;
+  description: string;
+  equipment: string[];
+  assigned_to: string;
+  timeline: string;
+  success_criteria: string;
+}
 
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+interface Pattern {
+  pattern: string;
+  affected_equipment: string[];
+  identified_by: string[];
+  confidence: string;
+  root_cause: string;
+  solution: string;
+}
+
+interface Trend {
+  trend: string;
+  impact: string;
+  recommendation: string;
+}
+
+interface Risk {
+  risk: string;
+  probability: string;
+  consequence: string;
+  mitigation: string;
+}
+
+interface Decision {
+  topic: string;
+  options: string[];
+  recommendation: string;
+  deadline: string;
+}
+
+interface FollowUp {
+  action: string;
+  timeline: string;
+  responsible: string;
+}
+
+const Dashboard: React.FC = () => {
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
-  // Fetch dashboard data from API
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        console.log('Fetching dashboard data...');
-        
-        const response = await fetch('/api/energy-analysis', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({}) // Empty body - n8n will generate everything
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Dashboard data received:', data);
-        
-        setDashboardData(data);
-        setLastUpdated(new Date().toLocaleString());
-        
-      } catch (err) {
-        console.error('Failed to fetch dashboard data:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/equipment-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch dashboard data');
       }
-    };
+      
+      const result = await response.json();
+      setData(result);
+      setLastUpdated(new Date());
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchDashboardData();
-    
-    // Auto-refresh every 5 minutes
-    const interval = setInterval(fetchDashboardData, 5 * 60 * 1000);
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 300000);
     return () => clearInterval(interval);
   }, []);
 
-  // Loading state
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading facility data...</p>
-        </div>
-      </div>
-    );
+    return <div className={styles.loading}>Loading dashboard data...</div>;
   }
 
-  // Error state
   if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">⚠️ Error</div>
-          <p className="text-gray-600">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
+    return <div className={styles.error}>{error}</div>;
   }
 
-  // No data state
-  if (!dashboardData) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">No dashboard data available</p>
-        </div>
-      </div>
-    );
+  if (!data) {
+    return <div className={styles.error}>No data available</div>;
   }
 
   return (
-    <div className="p-6 space-y-8">
-      {/* Dynamic Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {dashboardData.title || 'Facility Dashboard'}
-          </h1>
-          {dashboardData.subtitle && (
-            <p className="text-gray-600 mt-1">{dashboardData.subtitle}</p>
-          )}
+    <div className={styles.dashboard}>
+      <div className={styles.header}>
+        <div className={styles.statusBar} style={{backgroundColor: data.summary.status.color}}>
+          <AlertTriangle size={24} />
+          <span>{data.summary.status.message}</span>
         </div>
-        <div className="flex items-center space-x-4">
-          {lastUpdated && (
-            <span className="text-sm text-gray-500">
-              Last updated: {lastUpdated}
-            </span>
-          )}
-          <button 
-            onClick={() => window.location.reload()}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-          >
+        
+        <div className={styles.refreshSection}>
+          <button onClick={fetchData} className={styles.refreshButton}>
+            <RefreshCw size={16} />
             Refresh
           </button>
+          <div className={styles.timestamp}>
+            <Clock size={16} />
+            Last updated: {lastUpdated.toLocaleTimeString()}
+          </div>
         </div>
       </div>
 
-      {/* Dynamic Summary Cards */}
-      {dashboardData.summary && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {Object.entries(dashboardData.summary).map(([key, value], index) => {
-            // Define icons for each card type
-            const getIcon = (key: string, index: number) => {
-              if (key.toLowerCase().includes('equipment')) return <Boxes size={18} />;
-              if (key.toLowerCase().includes('energy')) return <Zap size={18} />;
-              if (key.toLowerCase().includes('critical') || key.toLowerCase().includes('issues')) return <Shield size={18} />;
-              if (key.toLowerCase().includes('maintenance')) return <Wrench size={18} />;
-              // Default icons based on position
-              const icons = [<Boxes size={18} />, <Shield size={18} />, <Zap size={18} />, <Wrench size={18} />];
-              return icons[index % icons.length];
-            };
-
-            const getIconStyle = (key: string, index: number) => {
-              if (key.toLowerCase().includes('equipment')) return 'card-icon equipment';
-              if (key.toLowerCase().includes('energy')) return 'card-icon energy'; 
-              if (key.toLowerCase().includes('critical') || key.toLowerCase().includes('issues')) return 'card-icon critical';
-              if (key.toLowerCase().includes('maintenance')) return 'card-icon maintenance';
-              // Default styles based on position
-              const styles = ['card-icon equipment', 'card-icon critical', 'card-icon energy', 'card-icon maintenance'];
-              return styles[index % styles.length];
-            };
-
-            return (
-              <div key={key} className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start" style={{ gap: '1rem' }}>
-                    <div className={getIconStyle(key, index)}>
-                      {getIcon(key, index)}
-                    </div>
-                    <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wider leading-tight">
-                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                    </h3>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">{value}</p>
-                </div>
-              </div>
-            );
-          })}
+      <div className={styles.summaryMetrics}>
+        <div className={styles.metricCard}>
+          <h3>Total Issues</h3>
+          <div className={styles.metricValue}>{data.summary.metrics.total_issues}</div>
         </div>
-      )}
+        <div className={styles.metricCard}>
+          <h3>Critical Issues</h3>
+          <div className={styles.metricValue}>{data.summary.metrics.critical_issues}</div>
+        </div>
+        <div className={styles.metricCard}>
+          <h3>Potential Savings</h3>
+          <div className={styles.metricValue}>
+            {data.summary.metrics.potential_savings.value}{data.summary.metrics.potential_savings.unit}
+          </div>
+        </div>
+      </div>
 
-      {/* Dynamic Quick Actions - Updated to use agent's structure */}
-      {dashboardData.quickActions && dashboardData.quickActions.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">AI-Powered Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {dashboardData.quickActions.map((action, index) => (
-              <div 
-                key={action.id || index} 
-                className="p-6 rounded-lg border border-gray-200 bg-white cursor-pointer transition-colors hover:bg-gray-50"
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-medium text-gray-900 flex-1 pr-2">{action.title}</h3>
-                  {action.priority && (
-                    <span className={`px-2 py-0.5 text-sm font-bold rounded whitespace-nowrap flex-shrink-0 ${
-                      action.priority === 'high' ? 'bg-red-100 text-red-800' :
-                      action.priority === 'medium' ? 'bg-orange-100 text-orange-800' :
-                      'bg-blue-100 text-blue-800'
-                    }`}>
-                      {action.priority === 'medium' ? 'medium' : action.priority}
-                    </span>
-                  )}
+      <div className={styles.alertsSection}>
+        <h2>Priority Alerts</h2>
+        {data.priority_alerts.map(alert => (
+          <div key={alert.id} className={`${styles.alertCard} ${styles[alert.severity]}`}>
+            <div className={styles.alertHeader}>
+              <Thermometer size={20} />
+              <h3>{alert.title}</h3>
+            </div>
+            <p>{alert.description}</p>
+            <div className={styles.alertAction}>
+              <strong>Action Required:</strong> {alert.action}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.actionsSection}>
+        <h2>Action Plan</h2>
+        {Object.entries(data.action_plan).map(([timeframe, plan]) => (
+          <div key={timeframe} className={styles.actionTimeframe}>
+            <h3>{timeframe.replace('_', ' ').toUpperCase()}</h3>
+            {plan.actions.map((action, index) => (
+              <div key={index} className={styles.actionItem}>
+                <div className={styles.actionPriority}>P{action.priority}</div>
+                <div className={styles.actionContent}>
+                  <div>{action.description}</div>
+                  <div className={styles.actionMeta}>
+                    <span>Timeline: {action.timeline}</span>
+                    <span>Assigned: {action.assigned_to}</span>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600">{action.description}</p>
               </div>
             ))}
           </div>
+        ))}
+      </div>
+
+      <div className={styles.impactSection}>
+        <h2>Business Impact</h2>
+        <div className={styles.impactGrid}>
+          <div className={styles.impactCard}>
+            <h3>Energy Savings</h3>
+            <ul>
+              <li>Immediate: {data.business_impact.energy_savings.immediate}</li>
+              <li>Short Term: {data.business_impact.energy_savings.short_term}</li>
+              <li>Long Term: {data.business_impact.energy_savings.long_term}</li>
+            </ul>
+          </div>
+          <div className={styles.impactCard}>
+            <h3>Resources Required</h3>
+            <p>Internal Hours: {data.resources.internal_hours}</p>
+            <p>Estimated Cost: {data.resources.estimated_cost}</p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
