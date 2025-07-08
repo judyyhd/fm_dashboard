@@ -1,84 +1,74 @@
-export const config = { api: { bodyParser: true } };
+export const config = {
+  api: { bodyParser: true }
+}
 
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ message: 'Method not allowed' })
   }
 
   const dashboard = {
     title: "Facility Energy Analysis Dashboard",
-    subtitle: "3 HVAC Issues Detected • 31.2°C Outdoor Temperature",
+    subtitle: "2 Equipment Issues Detected • 32.4°C Outdoor Temperature",
     summary: {
-      totalEquipment: 3,
-      criticalIssues: 2,
+      totalEquipment: 2,
+      criticalIssues: 1,
       energyRecommendations: 3,
-      maintenanceItems: 3
+      maintenanceItems: 2
     },
     quickActions: [
       {
-        id: "increase-temp-setpoint",
-        title: "Increase Temperature Setpoints",
-        description: "Raise setpoints to 22°C for units ff0000000000bc21 and ff0000000000e489",
+        id: "adjust-setpoint",
+        title: "Adjust Setpoint",
+        description: "Increase setpoint to 23-24°C for optimal efficiency",
         priority: "high",
         icon: "thermometer",
         color: "red"
       },
       {
-        id: "repair-keylock",
-        title: "Repair Keylock Mechanism",
-        description: "Fix keylock issues on unit ff0000000000e4a5",
+        id: "remove-lock",
+        title: "Remove Equipment Lock",
+        description: "Remove unauthorized lock on unit ff0000000000e4a5",
         priority: "medium",
-        icon: "key",
+        icon: "lock",
         color: "amber"
       },
       {
-        id: "standardize-fan-speed",
-        title: "Standardize Fan Speeds",
-        description: "Optimize fan speed settings across all units",
+        id: "calibrate-sensors",
+        title: "Calibrate Sensors",
+        description: "Calibrate temperature sensors across all units",
         priority: "low",
-        icon: "fan",
+        icon: "tool",
         color: "blue"
       }
     ],
     alerts: [
       {
-        id: "critical-low-temp",
-        title: "Critical Low Temperature Setting",
-        description: "Units operating at 5°C and 6°C setpoints",
-        equipment: "ff0000000000bc21, ff0000000000e489",
+        id: "critical-temp-differential",
+        title: "Critical Temperature Differential",
+        description: "27.4°C temperature differential exceeding efficient operating range",
+        equipment: "ff0000000000bc21",
         severity: "high",
         icon: "alert-triangle",
         color: "red"
       },
       {
-        id: "keylock-malfunction",
-        title: "Equipment Malfunction",
-        description: "Keylock mechanism issue detected",
+        id: "locked-equipment",
+        title: "Equipment Lock Detected",
+        description: "Locked status preventing automated weather-responsive operation",
         equipment: "ff0000000000e4a5",
         severity: "medium",
-        icon: "alert-circle",
+        icon: "lock",
         color: "amber"
-      },
-      {
-        id: "fan-speed-variance",
-        title: "Inconsistent Fan Speed Settings",
-        description: "High variance in fan speeds detected across units",
-        equipment: "All HVAC units",
-        severity: "low",
-        icon: "alert-octagon",
-        color: "yellow"
       }
     ],
     widgets: [
       {
         id: "outdoor-temp",
         title: "Outdoor Temperature",
-        value: 31.2,
+        value: 32.4,
         unit: "°C",
         icon: "sun",
         color: "orange"
@@ -86,15 +76,15 @@ export default async function handler(
       {
         id: "heat-index",
         title: "Heat Index",
-        value: 36.6,
+        value: 37.5,
         unit: "°C",
-        icon: "thermometer-sun",
+        icon: "thermometer",
         color: "red"
       },
       {
-        id: "energy-savings",
+        id: "potential-savings",
         title: "Potential Energy Savings",
-        value: "15-20",
+        value: "35",
         unit: "%",
         icon: "trending-down",
         color: "green"
@@ -102,12 +92,12 @@ export default async function handler(
       {
         id: "uv-index",
         title: "UV Index",
-        value: 9.5,
-        icon: "sun-medium",
-        color: "purple"
+        value: 7.5,
+        icon: "sun",
+        color: "yellow"
       }
     ]
-  };
+  }
 
-  return res.status(200).json(dashboard);
+  return res.status(200).json(dashboard)
 }
