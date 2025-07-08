@@ -1,0 +1,205 @@
+.dashboard {
+  padding: 24px;
+  background-color: #F9FAFB;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+}
+
+.refreshSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refreshButton:hover {
+  background: #F3F4F6;
+}
+
+.timestamp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6B7280;
+  font-size: 14px;
+}
+
+.summaryMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metricCard {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.metricCard h3 {
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.metricValue {
+  font-size: 32px;
+  font-weight: 600;
+  color: #2563EB;
+}
+
+.alertsSection {
+  margin-bottom: 32px;
+}
+
+.alertCard {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.alertCard.critical {
+  border-left: 4px solid #EF4444;
+}
+
+.alertCard.warning {
+  border-left: 4px solid #F59E0B;
+}
+
+.alertCard.info {
+  border-left: 4px solid #3B82F6;
+}
+
+.alertHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.alertAction {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.actionsSection {
+  margin-bottom: 32px;
+}
+
+.actionTimeframe {
+  margin-bottom: 24px;
+}
+
+.actionItem {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.actionPriority {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #3B82F6;
+  color: white;
+  font-weight: 600;
+}
+
+.actionContent {
+  flex: 1;
+}
+
+.actionMeta {
+  margin-top: 8px;
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.impactCard {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: #6B7280;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: #DC2626;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .statusBar {
+    width: 100%;
+  }
+  
+  .refreshSection {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
