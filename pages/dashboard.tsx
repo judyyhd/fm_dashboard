@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AlertTriangle, Thermometer, RefreshCw, Clock } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './dashboard.module.css';
 
 interface DashboardData {
   summary: {
